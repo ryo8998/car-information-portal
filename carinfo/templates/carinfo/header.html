@@ -1,0 +1,71 @@
+{% extends "base.html"%}
+{% load static%}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'carinfo/header.css' %}">
+  
+{% endblock style %}
+{% block script %}
+    <script type="text/javascript" src="http://www.carqueryapi.com/js/jquery.min.js"></script>
+    <script type="text/javascript" src="http://www.carqueryapi.com/js/carquery.0.3.4.js"></script>
+    {% comment %} <script type="text/javascript" defer src="{% static 'carinfo/header.js' %}"></script> {% endcomment %}
+
+{% endblock script %}
+{% block header %}
+    <header class="bg-light">
+        <form class="h-100 d-flex flex-wrap justify-content-center align-items-center align-content-center" action="/search-result" method="POST">
+            <div class="col-12 col-md-2 p-2 d-flex justify-content-center">
+                <div id="logo-container" class="col-10">
+                    <img class="w-100 h-auto" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-vv6SRn5VhmcU04zkZGrv3NYVh1oHaiN8DQ&usqp=CAU" alt="">
+                    <a href="{% url 'index'%}"></a>
+                </div>
+            </div>
+            {% for field in form %}
+                <div class="col-12 col-md-2 d-flex flex-wrap justify-content-center my-2">
+                    {{field.label_tag}}               
+                    {{field}}
+                </div>
+            {% endfor %}
+            <div class="col-12 col-md-1 d-flex justify-content-center my-2">
+                    <button class="btn btn-dark" type="submit">Submit</button>
+            </div>
+            {% csrf_token %}
+        </form>
+    </header>
+        <script type="text/javascript">
+
+const config = {
+    carMakerSelector:document.getElementById("id_car_maker"),
+    carModelSelector:document.getElementById("id_car_model"),
+    beginYearSelector:document.getElementById("id_begin_year"),
+    endYearSelector:document.getElementById("id_end_year"),
+    beginYear:1938,
+    endYear:new Date().getFullYear(),   
+};
+$(document).ready(
+function(){
+     //Create a variable for the CarQuery object.  You can call it whatever you like.
+     var carquery = new CarQuery();
+     carquery.init();
+     carquery.initYearMakeModelTrim('car-years', 'car-makes', 'car-models', 'car-model-trims');
+     //Optional: initialize the make, model, trim lists by providing their element IDs.
+     carquery.initMakeModelTrimList('make-list', 'model-list', 'trim-list', 'trim-data-list');
+     //If creating a search interface, set onclick event for the search button.  Make sure the ID used matches your search button ID.
+     $('#id_car_maker').change( function(e){ 
+        $.getJSON("https://www.carqueryapi.com/api/0.3/"+"?callback=?", {cmd:"getModels", make:e.target.value}, function(data) {    
+        const models = data.Models;
+        if(models.length === 0){
+            config.carModelSelector.innerHTML = `<option value="">Car Model</option>`;
+            return
+            }
+        config.carModelSelector.innerHTML = "";
+        for(let model of models){
+            config.carModelSelector.innerHTML +=
+            `<option value=${model.model_name}>${model.model_name}</option>`
+            }
+        });
+    });
+});
+</script>
+{% endblock header %}
+{% block content %}
+{% endblock content %}

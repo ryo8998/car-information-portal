@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'carinfo/index.css' %}">
+{% endblock style %}
+
+
+{% block content %}
+    {% include "carinfo/header.html"　with var="form" %} 
+    <div  class="d-flex flex-wrap justify-content-around align-items-center">
+        {% for maker in car_makers%}
+        <div class="col-10 col-md-3 mx-3">
+            <div id="image-container" >
+                <img class="w-100"src="{% static "carinfo/" %}{{maker}}.jpg" alt="">
+                <a href="{% url 'carmaker' carmaker=maker %}"></a>
+            </div>
+            <a href="{% url 'carmaker' carmaker=maker %}">{{maker}}</a>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock content %}
+

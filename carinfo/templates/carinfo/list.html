@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+    {% include "carinfo/header.html" with var="form" models="models" %}
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <h2>{{maker}}</h2>
+        <div class="col-4">
+            <img class="w-100 h-auto" src="{% static "carinfo/" %}{{maker}}.jpg" alt="">
+        </div>
+        {% if models %}
+            <h3>Models in {{year}}</h3>
+            {% for model in models %}
+                <h4 class="my-2 border-bottom">{{model.model_name}}</h4>
+            {% endfor %}
+        {% else %}
+            <h3 class="my-3">{{message}}</h3>
+        {% endif %}
+    </div>
+{% endblock content %}
+

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+    {% include "carinfo/header.html" with var="form" models="models" %}
+        <table class="table  text-center">
+        <thead>
+            <tr>
+                <th>Maker</th>
+                <th>Model</th>
+                <th>Model Year</th>
+                <th>Max Power</th>
+                <th>Top Speed</th>
+            </tr>
+        </thead>
+            <tbody>
+                {% for trim in trims %}
+                    <tr>
+                        <td>{{trim.model_make_id}}</td>
+                        <td>{{trim.model_name}}</td>
+                        <td>{{trim.model_year}}</td>
+                        <td>{{trim.model_engine_power_ps| default:"No Infomation"}}</td>
+                        <td>{{trim.model_top_speed_kph | default:"No Infomation"}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
+
